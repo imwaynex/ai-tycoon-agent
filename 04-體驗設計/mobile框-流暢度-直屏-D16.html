@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>D16｜流暢度 L0 直屏（Choose A＋D16b 用詞）</title>
+<style>
+  :root {
+    --bg:#0c1018;--card:#1c1e28;--line:#2c2f3d;--text:#e8e8ee;--muted:#8b8fa3;
+    --gold:#e0a44a;--sim:#d9434f;--ink:#1a1206;--ok:#5ecf8e;--info:#7ad7ff;
+    font-family:"PingFang TC","Noto Sans TC",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text)}
+  header{padding:12px 16px;border-bottom:1px solid #243044;font-size:13px;line-height:1.45}
+  header strong{color:var(--info)}
+  .wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;padding:16px}
+  .phone{width:280px;margin:0 auto;border:2px solid #3a4d66;border-radius:18px;padding:8px;background:#151a24}
+  .screen{background:var(--card);border:1px solid var(--line);border-radius:12px;min-height:420px;padding:12px;display:flex;flex-direction:column;gap:10px}
+  .steps{font-size:10px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+  .steps b{color:var(--text)}
+  .steps .off{opacity:.45;text-decoration:line-through}
+  .steps .badge{background:var(--sim);color:#fff;font-size:9px;font-weight:700;padding:1px 5px;border-radius:999px;margin-left:4px}
+  h2{margin:0;font-size:13px;color:var(--gold)}
+  .sim{display:inline-block;background:var(--sim);color:#fff;font-size:10px;font-weight:700;padding:1px 6px;border-radius:999px}
+  .hero{display:flex;gap:10px;align-items:center;border:1px solid var(--gold);border-radius:10px;padding:10px}
+  .av{width:48px;height:48px;border-radius:8px;border:1px solid var(--gold);display:grid;place-items:center;font-weight:800;color:var(--gold)}
+  .name{font-size:22px;font-weight:800}
+  .l0{font-size:15px;line-height:1.35;margin:0}
+  .cta{margin-top:auto;background:var(--gold);color:var(--ink);text-align:center;font-weight:800;padding:14px;border-radius:10px;font-size:16px}
+  .cta.busy{background:#5a4a2a;color:#f0e0c0}
+  .l1{font-size:11px;color:var(--info);text-align:center;padding:6px;border:1px dashed rgba(122,215,255,.35);border-radius:8px}
+  .ghost{font-size:11px;color:var(--muted);text-align:center}
+  .segs{display:flex;gap:6px}
+  .seg{flex:1;text-align:center;border:1px solid var(--line);border-radius:8px;padding:10px 4px;font-size:13px;color:var(--muted)}
+  .seg.on{border-color:var(--gold);color:var(--text);font-weight:700;background:rgba(224,164,74,.15)}
+  .picked{font-size:12px;color:var(--ok);text-align:center;font-weight:700}
+  .locked{font-size:12px;color:var(--gold);text-align:center;font-weight:700}
+  .big{font-size:28px;font-weight:800;color:#e5616a}
+  .big.pos{color:var(--ok)}
+  .metric{font-size:12px;color:var(--muted);text-align:center}
+  .ban{font-size:10px;color:var(--sim);text-align:center;border:1px solid rgba(217,67,79,.4);padding:4px;border-radius:6px}
+  .oknote{font-size:10px;color:var(--ok);text-align:center;border:1px solid rgba(94,207,142,.4);padding:4px;border-radius:6px}
+  .note{font-size:11px;color:var(--muted);margin:0 0 6px}
+  .anno{font-size:10px;color:var(--info);margin:6px 0 0;line-height:1.4;border-left:2px solid var(--info);padding-left:8px}
+  .prog{height:8px;background:#2a2e3c;border-radius:999px;overflow:hidden}
+  .prog>i{display:block;height:100%;width:42%;background:linear-gradient(90deg,#e0a44a,#7ad7ff)}
+  .wall{font-size:11px;color:var(--muted);border:1px solid var(--line);border-radius:8px;padding:8px}
+  .wall a{color:var(--info);text-decoration:none}
+  .toast{font-size:11px;background:#243044;border:1px solid #3a4d66;border-radius:8px;padding:6px;text-align:center;color:#cde}
+  .d16b{font-size:10px;color:#c9a0ff;margin:4px 0 0;line-height:1.35}
+</style>
+</head>
+<body>
+<header>
+  <div><strong>D16 流暢度直屏框</strong>｜Choose A（保守）｜主流程任命→派出→戰報→再派／撤回</div>
+  <div><strong>D16b 用詞對齊</strong>：玩家可見聽 <code>文案槽-用詞人話-D16b.md</code>；行為仍 F1–F9。狀態：待產品終檢（D16 行為＋D16b 用詞）。</div>
+  <div>D14 仍持：L0≤2 行 · 無首輪 NL · 折返帶 <code>reason_short</code> · <code>cancel=false</code>。數字僅示意槽，非驗收指標。內部 enum 不露 L0。</div>
+  <div>對齊：<code>IA流暢度改稿-D16.md</code> §0b</div>
+</header>
+<div class="wrap">
+
+  <!-- 1 大將空 -->
+  <div>
+    <p class="note">① 大將 · 空態</p>
+    <div class="phone"><div class="screen">
+      <div class="steps"><b>①任命</b> → <span class="off">②派出</span> → <span class="off">③戰報</span> · 紀錄</div>
+      <h2>大將 <span class="sim">模擬</span></h2>
+      <p class="l0">還沒有大將。</p>
+      <div class="ban">空態不露戰力 · 出征紀錄（D14）</div>
+      <div class="toast">派出不可達：現在不能派。</div>
+      <div class="cta">任命</div>
+    </div></div>
+    <p class="anno">F4：無契約時派出／戰報不 go()，步驟列標不可達＋極短原因。</p>
+    <p class="d16b">D16b：屏＝大將；步驟＝任命／派出／戰報／紀錄；禁 ready 等內部詞。</p>
+  </div>
+
+  <!-- 2 任命成功 → auto 派出 ready -->
+  <div>
+    <p class="note">② 任命成功 → 自動派出（不再「去出征」）</p>
+    <div class="phone"><div class="screen">
+      <div class="steps">①任命 → <b>②派出</b> → <span class="off">③戰報</span> · 紀錄</div>
+      <h2>派出 <span class="sim">模擬</span></h2>
+      <div class="hero"><div class="av">W</div><div><div class="name">WOLF</div></div></div>
+      <p class="l0">派 WOLF 出去。　模擬</p>
+      <div class="oknote">任命成功已自動抵達 · 無「去出征」CTA</div>
+      <div class="segs"><div class="seg">短征</div><div class="seg on">日</div><div class="seg">週</div></div>
+      <div class="picked">選好了：日</div>
+      <div class="l1">L1 這次怎麼派（預設藏）</div>
+      <div class="ban">L0 無 NL · 導航不建約</div>
+      <div class="cta">派出</div>
+    </div></div>
+    <p class="anno">F1／F2／F3：自動進 ready；唯「派出」commit；期間 inline 選好了。</p>
+    <p class="d16b">D16b：已選→選好了；出征→出去；期間＝短征／日／週。</p>
+  </div>
+
+  <!-- 3 派出 ready -->
+  <div>
+    <p class="note">③ 派出（期間＋選好了＋派出）</p>
+    <div class="phone"><div class="screen">
+      <div class="steps">①任命 → <b>②派出</b> → <span class="off">③戰報</span> · 紀錄</div>
+      <h2>派出 <span class="sim">模擬</span></h2>
+      <p class="l0">派 WOLF 出去。　模擬</p>
+      <div class="segs"><div class="seg on">短征</div><div class="seg">日</div><div class="seg">週</div></div>
+      <div class="picked">選好了：短征</div>
+      <div class="wall">緊湊：還沒出過征 · <a href="#">出征紀錄</a></div>
+      <div class="cta">派出</div>
+      <div class="ghost">cancel=false · 無取消</div>
+    </div></div>
+    <p class="anno">F3／F9：選好了回饋；出征紀錄僅入口不搶主 CTA。</p>
+    <p class="d16b">D16b：牆／履歷→出征紀錄；尚無戰績→還沒出過征。</p>
+  </div>
+
+  <!-- 4 in-field -->
+  <div>
+    <p class="note">④ 在外面（進度，非禁用 CTA）</p>
+    <div class="phone"><div class="screen">
+      <div class="steps">①任命 → <b>②派出</b> → <span class="off">③戰報</span> · 紀錄</div>
+      <h2>派出 <span class="sim">模擬</span></h2>
+      <p class="l0">在外面。等結果。</p>
+      <div class="locked">這次：短征</div>
+      <div class="prog" aria-hidden="true"><i></i></div>
+      <div class="ghost">進度顯示 · 非按鈕</div>
+      <div class="ban">禁止 hero＝禁用「等待戰報」</div>
+      <div class="cta busy">正在派出…</div>
+      <div class="ghost">無取消</div>
+    </div></div>
+    <p class="anno">F6：先「正在派出…」再進度；禁用等待戰報不作主視覺。（框中 busy 列標註過渡，實作以狀態取代 CTA）</p>
+    <p class="d16b">D16b：派出中→正在派出…；本次期間→這次；出征中→在外面。等結果。</p>
+  </div>
+
+  <!-- 5 戰報成功 -->
+  <div>
+    <p class="note">⑤ 戰報 · 正常回來</p>
+    <div class="phone"><div class="screen">
+      <div class="steps">①任命 → ②派出 → <b>③戰報</b> · 紀錄</div>
+      <h2>戰報 <span class="sim">模擬</span></h2>
+      <p class="l0">WOLF 回來了。</p>
+      <div class="metric">賺賠</div>
+      <div class="big">−267.24</div>
+      <p class="l0">最大回落 6.26%　模擬</p>
+      <div class="l1">次級：改打法（才見 NL L2）</div>
+      <div class="cta">再派一次</div>
+      <div class="ghost">撤回 · 停用這員</div>
+      <div class="wall">緊湊：本趟 −267.24 · <a href="#">出征紀錄</a></div>
+    </div></div>
+    <p class="anno">F5／F9：唯「再派」建 ready；數字示意槽非指標驗收。D14：無 evidence 字串。</p>
+    <p class="d16b">D16b：歸來→回來了；損益→賺賠；回撤→最大回落；再派可寫再派一次；撤回主動詞＋弱註停用這員。</p>
+  </div>
+
+  <!-- 6 提前回來 -->
+  <div>
+    <p class="note">⑥ 戰報 · 提前回來（reason_short）</p>
+    <div class="phone"><div class="screen">
+      <div class="steps">①任命 → ②派出 → <b>③戰報</b> · 紀錄</div>
+      <h2>戰報 <span class="sim">模擬</span></h2>
+      <p class="l0">WOLF 提前回來。碰到停損線。</p>
+      <div class="metric">賺賠</div>
+      <div class="big pos">＋42.10</div>
+      <p class="l0">這次有賺，但規則叫停，提前回來。　模擬</p>
+      <div class="ban">折返 L0 必帶人話 reason_short（D14＋D16b）</div>
+      <div class="cta">再派</div>
+      <div class="ghost">撤回</div>
+    </div></div>
+    <p class="anno">D14 不破壞：≤2 行正文；原因極短；再派仍唯一建約。</p>
+    <p class="d16b">D16b：折返→提前回來；觸及回撤上限→碰到停損線；禁空喊失敗／raw failed_risk。</p>
+  </div>
+
+  <!-- 7 再派 → ready -->
+  <div>
+    <p class="note">⑦ 再派 → 派出（期間預填）</p>
+    <div class="phone"><div class="screen">
+      <div class="steps">①任命 → <b>②派出</b> → ③戰報 · 紀錄</div>
+      <h2>派出 <span class="sim">模擬</span></h2>
+      <p class="l0">派 WOLF 出去。　模擬</p>
+      <div class="oknote">再派已建下一趟 · 大將頁無暗門建約</div>
+      <div class="segs"><div class="seg on">短征</div><div class="seg">日</div><div class="seg">週</div></div>
+      <div class="picked">選好了：短征（預填上一趟）</div>
+      <div class="cta">派出</div>
+      <div class="ghost">仍須派出才出發</div>
+    </div></div>
+    <p class="anno">F3／F5：預填 last period；F2：派出才 commit。</p>
+    <p class="d16b">D16b：可見「派出」；不露 commit／ready。</p>
+  </div>
+
+  <!-- 8 settle 非搶席 -->
+  <div>
+    <p class="note">⑧ settle 條件跳席／有新結果 badge（對照）</p>
+    <div class="phone"><div class="screen">
+      <div class="steps">①任命 → ②派出 → <span>③戰報</span><span class="badge">有新結果</span> · 紀錄</div>
+      <h2>大將 <span class="sim">模擬</span></h2>
+      <div class="hero"><div class="av">W</div><div><div class="name">WOLF</div></div></div>
+      <p class="l0">WOLF　模擬</p>
+      <div class="toast">仍在本席 · 未強制拉去戰報（有編輯／已切走）</div>
+      <div class="ban">無「去出征」主 CTA · 無隱藏再派</div>
+      <div class="l1">弱：為什麼／看結果（可達時才可點）</div>
+      <div class="ghost">F7：僅派出席且無 sheet 才 auto 進戰報</div>
+    </div></div>
+    <p class="anno">F7／F1／F5：badge 取代搶席；大將不承擔建約。</p>
+    <p class="d16b">D16b：新戰報→有新結果；屏＝大將；L0 只「模擬」徽章。</p>
+  </div>
+
+</div>
+</body>
+</html>

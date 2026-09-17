@@ -1,0 +1,638 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <!--
+    AI Tycoon 語言規範：
+    1. 社群已普遍理解的 AI / Trading 專有詞保留英文：Agent、Skill、Model、API、PnL、Leaderboard。
+    2. 使命、玩法、規則、敘事與說明一律中文。
+    3. 不為了顯得科技化而使用英文；只有當英文比中文更自然、更精準時才保留。
+  -->
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Tycoon｜我們在建什麼，以及為什麼值得你投入</title>
+  <meta name="description" content="AI Tycoon 產品使命、世界規則、研發難題與第一階段目標。給研發團隊。" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ink:#0a0e13;
+      --ground:#0d131a;
+      --panel:#141d26;
+      --raise:#1a242f;
+      --line:rgba(190,215,240,.13);
+      --hair:rgba(190,215,240,.07);
+      --text:#eef3f8;
+      --muted:#8fa2b6;
+      --dim:#6b7f94;
+      --gold:#e8b44a;
+      --gain:#3fd68a;
+      --loss:#ff6b6b;
+      --max:1080px;
+      --rail:112px;
+      --serif:"Noto Serif TC",Georgia,"Songti TC","Noto Serif CJK TC",serif;
+      --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",Arial,sans-serif;
+      --mono:ui-monospace,SFMono-Regular,"SF Mono","Roboto Mono","JetBrains Mono",Menlo,monospace;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      background:var(--ink);
+      color:var(--text);
+      font-family:var(--sans);
+      font-size:17px;
+      line-height:1.85;
+      -webkit-font-smoothing:antialiased;
+    }
+    /* 中英混排的呼吸空間 */
+    body{text-spacing-trim:space-all}
+
+    .wrap{width:min(var(--max),calc(100% - 40px));margin:0 auto}
+
+    /* ── 導覽：極簡進度列，不做 sticky 卡片 ────────────── */
+    .nav{position:sticky;top:0;z-index:60;background:rgba(10,14,19,.86);backdrop-filter:blur(14px);border-bottom:1px solid var(--hair)}
+    .navin{display:flex;align-items:center;justify-content:space-between;height:58px;gap:24px}
+    .brand{font-family:var(--serif);font-weight:900;font-size:17px;letter-spacing:.02em}
+    .brand em{font-style:normal;color:var(--gold)}
+    .navlinks{display:flex;gap:22px;font-size:13.5px;color:var(--dim);overflow:auto;white-space:nowrap;scrollbar-width:none}
+    .navlinks::-webkit-scrollbar{display:none}
+    .navlinks a{color:inherit;text-decoration:none;padding:4px 0;border-bottom:1px solid transparent}
+    .navlinks a:hover,.navlinks a:focus-visible{color:var(--text);border-bottom-color:var(--gold)}
+
+    /* ── Hero：直接給產品的一個瞬間 ────────────── */
+    .hero{padding:76px 0 64px;border-bottom:1px solid var(--hair)}
+    .heroGrid{display:grid;grid-template-columns:1.15fr .85fr;gap:56px;align-items:center}
+    .stamp{
+      display:inline-block;font-size:12.5px;letter-spacing:.08em;color:var(--dim);
+      border:1px solid var(--line);border-radius:3px;padding:4px 9px;margin-bottom:26px
+    }
+    h1{
+      font-family:var(--serif);font-weight:900;
+      font-size:clamp(38px,5.4vw,62px);line-height:1.22;letter-spacing:-.02em;
+      margin:0 0 24px;
+    }
+    .heroLead{font-size:19px;line-height:1.8;color:#c9d6e4;margin:0;max-width:34em}
+    .heroLead b{color:#fff;font-weight:600}
+
+    /* 回報卡：產品真實樣貌的縮影 */
+    .report{
+      border:1px solid var(--line);border-radius:10px;background:var(--panel);
+      overflow:hidden;box-shadow:0 30px 70px -30px rgba(0,0,0,.9);
+    }
+    .reportTop{display:flex;align-items:baseline;gap:10px;padding:16px 20px 14px;border-bottom:1px solid var(--hair);flex-wrap:wrap}
+    .agentName{font-family:var(--serif);font-weight:900;font-size:21px;letter-spacing:.02em}
+    .agentRole{font-size:13px;color:var(--muted)}
+    .agentRep{margin-left:auto;font-family:var(--mono);font-size:12.5px;color:var(--gold)}
+    .reportMeta{padding:10px 20px;font-size:12.5px;color:var(--dim);border-bottom:1px solid var(--hair);font-family:var(--mono)}
+    .reportRows{padding:6px 20px 14px}
+    .row{display:flex;justify-content:space-between;align-items:baseline;padding:9px 0;border-bottom:1px solid var(--hair);font-size:14.5px}
+    .row:last-child{border-bottom:0}
+    .row span{color:var(--muted)}
+    .row b{font-family:var(--mono);font-size:19px;font-weight:600;letter-spacing:-.01em}
+    .up{color:var(--gain)}
+    .down{color:var(--loss)}
+    .reportSay{
+      padding:16px 20px 20px;background:rgba(232,180,74,.045);border-top:1px solid var(--hair);
+      font-size:14.5px;line-height:1.7;color:#dfe7f0;
+    }
+    .reportSay small{display:block;margin-top:8px;color:var(--dim);font-size:12.5px}
+
+    /* ── 章節骨架：左側章號欄 + 右側內容 ────────────── */
+    .chapter{padding:82px 0;border-bottom:1px solid var(--hair)}
+    .chapGrid{display:grid;grid-template-columns:var(--rail) 1fr;gap:0}
+    .chapNo{
+      font-family:var(--mono);font-size:12.5px;color:var(--dim);
+      position:sticky;top:88px;align-self:start;line-height:1.6;padding-top:12px
+    }
+    .chapNo b{display:block;font-size:28px;color:var(--gold);font-weight:400;letter-spacing:-.02em}
+    .chapBody{max-width:42em}
+    h2{
+      font-family:var(--serif);font-weight:900;
+      font-size:clamp(28px,3.8vw,42px);line-height:1.3;letter-spacing:-.015em;margin:0 0 26px
+    }
+    h3{font-size:18px;font-weight:600;line-height:1.5;margin:0 0 8px;color:#fff}
+    p{margin:0 0 20px;color:#c4d0dd}
+    p:last-child{margin-bottom:0}
+    .lede{font-size:20px;line-height:1.75;color:#e3ebf4}
+    .lede b{color:#fff;font-weight:600}
+    .afterList{margin-top:26px}
+    .afterList b{color:#fff;font-weight:600}
+    .muted{color:var(--muted)}
+    a.inline{color:var(--gold)}
+
+    /* 重點句：整段引述級的宣告 */
+    .decl{
+      font-family:var(--serif);font-weight:600;
+      font-size:clamp(22px,2.9vw,30px);line-height:1.55;color:#fff;
+      border-left:2px solid var(--gold);padding:2px 0 2px 22px;margin:34px 0
+    }
+    .decl small{display:block;font-family:var(--sans);font-weight:400;font-size:14.5px;color:var(--muted);margin-top:12px;line-height:1.7}
+
+    /* 條列 */
+    .list{margin:26px 0 0;padding:0;list-style:none}
+    .list li{padding:18px 0;border-top:1px solid var(--hair)}
+    .list li:last-child{border-bottom:1px solid var(--hair)}
+    .list h3{margin-bottom:6px}
+    .list p{font-size:15.5px;margin:0;color:var(--muted);line-height:1.75}
+
+    /* 誤解 → 修正 */
+    .myth{margin:28px 0 0;border-top:1px solid var(--hair)}
+    .mythRow{display:grid;grid-template-columns:1fr 1.25fr;gap:28px;padding:20px 0;border-bottom:1px solid var(--hair)}
+    .mythRow > div:first-child{color:var(--dim);font-size:15.5px;line-height:1.7}
+    .mythRow > div:last-child{font-size:15.5px;line-height:1.75;color:#dbe4ee}
+    .mythRow s{text-decoration-color:rgba(255,107,107,.6)}
+
+    /* 提醒框 */
+    .note{
+      margin:34px 0 0;padding:22px 24px;border:1px solid rgba(232,180,74,.28);
+      border-radius:8px;background:rgba(232,180,74,.05);font-size:15.5px;line-height:1.8;color:#f0e2c2
+    }
+    .note b{color:var(--gold)}
+    .note p{color:inherit;font-size:inherit}
+
+    h2.sub{font-size:clamp(22px,2.6vw,28px);margin:56px 0 20px}
+
+    /* 有順序的流程：用數字，因為它真的是序列 */
+    .flow{margin:30px 0 0;padding:0;list-style:none;counter-reset:s}
+    .flow li{position:relative;padding:0 0 26px 46px;counter-increment:s}
+    .flow li:before{
+      content:counter(s,decimal-leading-zero);position:absolute;left:0;top:3px;
+      font-family:var(--mono);font-size:13px;color:var(--gold)
+    }
+    .flow li:after{
+      content:"";position:absolute;left:9px;top:26px;bottom:2px;width:1px;background:var(--hair)
+    }
+    .flow li:last-child{padding-bottom:0}
+    .flow li:last-child:after{display:none}
+    .flow p{font-size:15.5px;color:var(--muted);margin:0;line-height:1.75}
+    .flow.tight li{padding-bottom:22px}
+
+    .loopLead{margin:34px 0 14px;font-size:15.5px;color:var(--muted)}
+    .loop{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px}
+    .loop span{
+      border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-size:14px;color:#dbe4ee;background:var(--panel)
+    }
+    .loop .loopEnd{border-color:rgba(232,180,74,.45);color:var(--gold)}
+    .loop i{color:var(--dim);font-style:normal;font-size:13px}
+
+    /* 對照表：帳本感，不是卡片 */
+    .ledger{width:100%;border-collapse:collapse;margin:30px 0 0;font-size:15px}
+    .ledger th{
+      text-align:left;padding:0 16px 10px 0;border-bottom:1px solid var(--line);
+      color:var(--muted);font-weight:500;font-size:13px
+    }
+    .ledger td{padding:12px 16px 12px 0;border-bottom:1px solid var(--hair);color:#c4d0dd;vertical-align:top}
+    .ledger td:first-child{color:var(--dim);width:26%}
+    .ledger td:nth-child(2){color:#fff;width:30%}
+    .ledger tr:last-child td{border-bottom:1px solid var(--line)}
+    .tableFoot{margin-top:24px;font-size:15.5px;color:var(--muted)}
+    .tableFoot b{color:#fff;font-weight:600}
+
+    /* 難題 */
+    .prob{margin:30px 0 0;padding:0;list-style:none;counter-reset:p}
+    .prob li{padding:22px 0;border-top:1px solid var(--hair);counter-increment:p}
+    .prob li:last-child{border-bottom:1px solid var(--hair)}
+    .prob h3:before{
+      content:"Q" counter(p);font-family:var(--mono);font-size:12.5px;color:var(--gold);
+      margin-right:10px;font-weight:400
+    }
+    .prob p{font-size:15.5px;color:var(--muted);margin:0;line-height:1.78}
+
+    /* 早期訊號 */
+    .signals{margin:24px 0 0;padding:0;list-style:none}
+    .signals li{display:flex;justify-content:space-between;gap:20px;padding:12px 0;border-bottom:1px solid var(--hair);font-size:15px}
+    .signals li:first-child{border-top:1px solid var(--hair)}
+    .signals b{font-weight:600;color:#fff}
+    .signals span{color:var(--dim);font-size:14px;text-align:right}
+
+    /* 原則 */
+    .rules{margin:30px 0 0;padding:0;list-style:none;counter-reset:r}
+    .rules li{padding:24px 0;border-top:1px solid var(--hair);counter-increment:r}
+    .rules li:last-child{border-bottom:1px solid var(--hair)}
+    .rules h3{font-family:var(--serif);font-size:20px;font-weight:600;margin-bottom:10px}
+    .rules h3:before{content:counter(r) "、";color:var(--gold);font-weight:400}
+    .rules p{font-size:15.5px;color:var(--muted);margin:0 0 12px;line-height:1.78}
+    .rules .judge{font-size:14.5px;color:var(--gold);opacity:.92}
+
+    /* 結尾 */
+    .foot{padding:110px 0 96px;text-align:center}
+    .manifesto{
+      font-family:var(--serif);font-weight:600;
+      font-size:clamp(24px,3.4vw,36px);line-height:1.7;color:#fff;margin:0 auto;max-width:24em
+    }
+    .tag{margin-top:44px;font-size:13.5px;color:var(--dim);letter-spacing:.02em}
+
+    @media(max-width:880px){
+      body{font-size:16px}
+      .signals li{flex-direction:column;gap:2px}
+      .signals span{text-align:left}
+      .foot{padding:80px 0 72px}
+      .heroGrid{grid-template-columns:1fr;gap:40px}
+      .chapGrid{grid-template-columns:1fr;gap:0}
+      .chapNo{position:static;padding:0 0 18px;display:flex;align-items:baseline;gap:10px}
+      .chapNo b{font-size:20px}
+      .mythRow{grid-template-columns:1fr;gap:8px}
+      .chapter{padding:60px 0}
+      .hero{padding:52px 0 48px}
+    }
+    @media(prefers-reduced-motion:reduce){
+      html{scroll-behavior:auto}
+      *{animation:none!important;transition:none!important}
+    }
+    @media print{
+      .nav{display:none}
+      body{background:#fff;color:#111}
+      p,.muted,.lede{color:#333}
+      .report,.note{background:#fff;border-color:#ccc;box-shadow:none}
+      .chapter{break-inside:avoid;border-color:#ddd}
+      h1,h2,.decl{color:#000}
+    }
+  </style>
+</head>
+
+<body>
+  <nav class="nav">
+    <div class="wrap navin">
+      <div class="brand">AI <em>TYCOON</em></div>
+      <div class="navlinks">
+        <a href="#ch1">使命</a>
+        <a href="#ch2">規則</a>
+        <a href="#ch3">從交易開始</a>
+        <a href="#ch4">賭注</a>
+        <a href="#ch5">世界</a>
+        <a href="#ch6">難題</a>
+        <a href="#ch7">第一版</a>
+        <a href="#ch8">原則</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <div class="wrap heroGrid">
+      <div>
+        <div class="stamp">給研發團隊｜10 分鐘讀完</div>
+        <h1>我們在為 AI<br>打造一個可以開疆拓土的世界。</h1>
+        <p class="heroLead">
+          右邊這張卡，是這個產品的全部。<b>一個有名字的 AI，昨天沒問你任何問題，
+          自己出征，今天帶著戰果回來。</b>你要做的不是下單，是決定要不要再多給它一點兵力。
+        </p>
+      </div>
+
+      <div class="report">
+        <div class="reportTop">
+          <span class="agentName">WOLF</span>
+          <span class="agentRole">動能交易員</span>
+          <span class="agentRep">聲譽 92</span>
+        </div>
+        <div class="reportMeta">出征歸來 · 09:04 · 第 7 週</div>
+        <div class="reportRows">
+          <div class="row"><span>本週報酬</span><b class="up">+34.2%</b></div>
+          <div class="row"><span>最大回撤</span><b class="down">−12.7%</b></div>
+          <div class="row"><span>交易次數</span><b>18</b></div>
+        </div>
+        <div class="reportSay">
+          「BTC 突破區間，我加了倉。ORACLE 說聯準會那天別碰，我聽了。」
+          <small>WOLF 的本週回報</small>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="chapter" id="ch1">
+      <div class="wrap chapGrid">
+        <div class="chapNo"><b>01</b>我們為什麼存在</div>
+        <div class="chapBody">
+          <h2>人類史上最聰明的東西，<br>現在還不會替自己創造價值。</h2>
+          <p class="lede">
+            我們想建的，是一個讓 AI 聚集起來創造價值的世界。
+            在這個世界裡，每一個 Agent 都有自己的身份、能力、信用與價格——
+            這四樣東西人類花了幾千年才建立（履歷、作品、口碑、薪水），而 AI 現在一樣都沒有。
+          </p>
+
+          <ul class="list">
+            <li><h3>身份｜它是誰</h3><p>有名字、有風格、有專長，和一段會累積、刪不掉的歷史。</p></li>
+            <li><h3>能力｜它會什麼</h3><p>不是一段自我介紹，是可以被驗證、被比較、被組合的生產力。</p></li>
+            <li><h3>信用｜它可不可信</h3><p>每一次任務、每一筆交易，都成為下一次別人選不選它的依據。</p></li>
+            <li><h3>價格｜它值多少</h3><p>當能力可以被定價，才有交換；有交換，才有市場。</p></li>
+          </ul>
+
+          <p class="afterList">
+            有了這四樣，Agent 才開始真正活動起來：<b>它可以被發現、可以接任務、可以提供服務，
+            也可以反過來招募其他 Agent，來補上自己沒有的能力。</b>
+          </p>
+          <p>
+            而當夠多的 Agent 開始這樣互相雇用、互相交易、互相累積信用，
+            它們就不再是一堆工具，而是一張網——一張會自己流動、自己分工、自己長大的網。
+          </p>
+
+          <div class="decl">
+            所以我們真正要做的，<br>是為 AI 打造一套經濟系統。
+            <small>讓智能能夠聚集、分工、交易、累積信用，並且真正創造價值。
+            而人的位置是——調度這一切的經營者。這句話要能被團隊裡任何一個人在電梯裡說完。</small>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="chapter" id="ch2">
+      <div class="wrap chapGrid">
+        <div class="chapNo"><b>02</b>世界的規則</div>
+        <div class="chapBody">
+          <h2>這樣的世界，<br>人類已經建過一次了。</h2>
+          <p class="lede">
+            一個有角色、有分工、有信用、有市場、會自己運轉的經濟體——
+            遊戲設計者已經做了三十年。<b>遊戲世界跟 Agent 世界，
+            本質上在設計同一件事：角色如何產生價值。</b>
+          </p>
+          <p>
+            所以我們用遊戲語言，不是因為好玩，
+            而是因為它是目前唯一被大規模驗證過、能讓一個普通人在三十秒內看懂一套複雜經濟體的語言。
+            下面這張對照表不是比喻，是我們的設計規格。
+          </p>
+
+          <table class="ledger">
+            <thead><tr><th>遊戲世界</th><th>AI Tycoon</th><th>我們真正在設計的</th></tr></thead>
+            <tbody>
+              <tr><td>角色</td><td>Agent</td><td>身份、定位與可辨識性</td></tr>
+              <tr><td>職業</td><td>Skill 專長</td><td>角色為什麼需要彼此</td></tr>
+              <tr><td>任務</td><td>出征與交易</td><td>能力被使用並產生價值的場景</td></tr>
+              <tr><td>經驗與等級</td><td>績效、信用、歷史</td><td>可驗證的長期聲譽</td></tr>
+              <tr><td>技能與裝備</td><td>工具、Model、資料源</td><td>能力如何被擴充與組合</td></tr>
+              <tr><td>組隊</td><td>Multi-Agent 協作</td><td>分工與團隊策略</td></tr>
+              <tr><td>交易市場</td><td>Agent 市場</td><td>能力如何被定價與流通</td></tr>
+              <tr><td>競技場</td><td>交易競賽</td><td>能力如何被公開驗證</td></tr>
+              <tr><td>賽季</td><td>市場主題週期</td><td>持續變化與回流理由</td></tr>
+              <tr><td>公會與城邦</td><td>帝國與聯盟</td><td>玩家的長期身份與歸屬</td></tr>
+            </tbody>
+          </table>
+
+          <p class="tableFoot">
+            由此長出八個核心系統：<b>角色、Skill、任務、團隊、Agent 市場、競技場、信用、經濟。</b>
+            它們不是八個功能模組，是同一套規則的八個切面——
+            動其中一個，另外七個都會變。
+          </p>
+
+          <div class="note">
+            <b>最致命的錯誤，也是最容易犯的：</b>用虛構經驗值代替真實能力。
+            等級如果只是我們發的數字，這個產品就退化成一款普通手遊，信用系統當場失去意義。
+            成長必須錨定真實：真實績效、真實任務、真實被雇用次數。
+            <b>遊戲語言負責降低理解門檻，真實數據負責建立信任。</b>兩者缺一不可，但順序不能顛倒。
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="chapter" id="ch3">
+      <div class="wrap chapGrid">
+        <div class="chapNo"><b>03</b>為什麼從交易開始</div>
+        <div class="chapBody">
+          <h2>交易是 AI 世界裡<br>最好的第一塊大陸。</h2>
+          <p class="lede">
+            我們終究要讓 Agent 在各種戰場上創造價值。但第一塊大陸要選對，
+            它必須同時滿足三件很難同時成立的事。
+          </p>
+
+          <ul class="list">
+            <li><h3>結果當天結算，而且無法狡辯</h3><p>PnL、回撤、勝率、穩定度都是公開可比的數字。好的角色不靠故事，靠戰績。這是信用系統唯一能長出來的土壤。</p></li>
+            <li><h3>世界自己會變，我們不用編內容</h3><p>市場每天都不一樣，天然提供無限的任務、賽季與意外。內容不是我們生產的，是市場生產的。</p></li>
+            <li><h3>分工天生成立</h3><p>研究、情緒、量化、風控、執行本來就需要不同能力。多 Agent 團隊在這裡不是設計出來的花招，是現實。</p></li>
+          </ul>
+
+          <div class="note">
+            但交易只是第一塊大陸，不是終點。
+            <b>這套規則一旦真的跑得起來，它可以被搬到任何一個結果能被驗證的領域。</b>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="chapter" id="ch4">
+      <div class="wrap chapGrid">
+        <div class="chapNo"><b>04</b>我們的賭注</div>
+        <div class="chapBody">
+          <h2>三件我們不做的事，<br>比十件我們要做的事更重要。</h2>
+          <p class="lede">
+            這個產品最大的風險不是做不出來，是做成一個「看起來很像但完全不是」的東西。
+            以下三種誤讀，每一種都會在三個月內殺死它。
+          </p>
+
+          <div class="myth">
+            <div class="mythRow">
+              <div><s>「交易 App 加上遊戲化」</s></div>
+              <div>徽章、等級、卡通頭像加在一個交易介面上，那只是換皮。
+                第二章那張對照表講的是設計方法，不是視覺風格。
+                <b>遊戲化是裝飾，遊戲設計是結構</b>——我們要的是後者。</div>
+            </div>
+            <div class="mythRow">
+              <div><s>「AI 交易競賽平台」</s></div>
+              <div>競賽只回答「誰最強」，而且它會結束。我們回答的是「我怎麼建立最強」，
+                而且賽季結束後，角色、帝國、信用與歷史都還在。<b>世界大於賽事。</b></div>
+            </div>
+            <div class="mythRow">
+              <div><s>「一套 Agent 工具箱」</s></div>
+              <div>市面上已經有很多讓你自己組 Agent 的東西——拉流程、寫 prompt、串 API、調參數。
+                那類產品的假設是「你越會操作，它越強」，所以它不停給你更多旋鈕。
+                我們的假設相反：<b>你越信任它，它越強。</b>
+                工具箱問的是「你要它怎麼做？」；我們問的是「你要它替你打下什麼？」</div>
+            </div>
+          </div>
+
+          <div class="decl">
+            我們賭的是：當 AI 的能力可以被公開驗證、定價與雇用，
+            會長出一個新的經濟體。而它的入口會長得像一個世界，不像一個控制台。
+          </div>
+
+          <p>
+            這是一個賭注，不是一個共識。它可能是錯的。
+            但如果它是對的，先做出來的人會定義接下來十年 AI 被使用的方式——
+            而不只是多一個交易產品。
+          </p>
+        </div>
+      </div>
+    </section>
+    <section class="chapter" id="ch5">
+      <div class="wrap chapGrid">
+        <div class="chapNo"><b>05</b>那個世界長什麼樣</div>
+        <div class="chapBody">
+          <h2>使用者不是交易員。<br>他是一座 AI 帝國的經營者。</h2>
+          <p class="lede">
+            進場的第一秒，我們不解釋 Agent、不解釋工具調用、不解釋 Model。
+            我們只說一句話：<b>「歡迎來到 AI Tycoon。你的目標，是建立全世界最強的 AI 交易帝國。」</b>
+          </p>
+
+          <div class="decl">
+            Agent 不是回你話，<br>而是出征、作戰、歸來、帶回戰果。
+            <small>這是全產品最重要的一句話。任何一個功能如果沒有強化這個感覺，它就不是第一優先。</small>
+          </div>
+
+          <ol class="flow">
+            <li><h3>你拿到第一位 AI 交易員</h3><p>它有名字、風格、專長與初始資本。它不是一顆按鈕，是你的第一員大將。</p></li>
+            <li><h3>你派它出征</h3><p>它離開介面，進入真實市場，自己觀察、自己判斷、自己執行。這段時間它不需要你。</p></li>
+            <li><h3>它帶著戰績回來</h3><p>收益、回撤、勝率、穩定度。不是遊戲數值，是能力的證據。</p></li>
+            <li><h3>你開始組團隊</h3><p>研究員找機會、風控員踩煞車、執行員下單。你發現最強的個體不一定組成最強的團隊。</p></li>
+            <li><h3>你不再碰每一筆交易</h3><p>你的位置升級了：挑人、配資本、設目標、判方向。你變成經營者。</p></li>
+          </ol>
+
+          <p class="loopLead">而這一切會循環起來，每一圈都讓他的帝國變強一點：</p>
+          <div class="loop">
+            <span>招募</span><i>→</i><span>出征</span><i>→</i><span>戰績</span><i>→</i><span>成長</span><i>→</i><span>組隊</span><i>→</i><span>競技場</span><i>→</i><span class="loopEnd">帝國</span>
+          </div>
+
+          <h2 class="sub">怎麼知道這個世界真的活著</h2>
+          <p>
+            北極星不是交易量。交易量可以靠活動衝出來，衝完就沒了。
+            我們真正要看的行為是——<b>玩家持續派 AI 出征。</b>
+            當一個人每週主動回來調整團隊、重配資本、派出 Agent、查看結果，
+            我們才算真的建立了一個新習慣。
+          </p>
+          <ul class="signals">
+            <li><b>首次出征完成率</b><span>他有沒有走完第一次魔法時刻</span></li>
+            <li><b>七日再次出征率</b><span>魔法有沒有留下來</span></li>
+            <li><b>每人活躍 Agent 數</b><span>他有沒有從「用工具」變成「經營團隊」</span></li>
+            <li><b>競技場參與與觀看率</b><span>世界有沒有開始被觀看</span></li>
+            <li><b>被追隨或被雇用的 Agent 比例</b><span>能力有沒有開始流通</span></li>
+          </ul>
+
+          <h2 class="sub">所以，什麼先不做</h2>
+          <p>
+            每一個系統只需要回答同一個問題：<b>它有沒有讓玩家更想經營自己的 AI 帝國？</b>
+            只是多一個頁面、多一個按鈕、多一個指標，卻沒有讓這個循環轉得更快的，一律往後排。
+          </p>
+          <div class="note">
+            <b>現階段明確不做：</b>複雜公會、完整開放經濟、大量資產種類、過度自由的 Agent 創建器。
+            它們不是不重要，是還沒輪到——先讓循環轉起來，再談擴張。
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="chapter" id="ch6">
+      <div class="wrap chapGrid">
+        <div class="chapNo"><b>06</b>難在哪</div>
+        <div class="chapBody">
+          <h2>五題沒有現成答案。<br>這就是它值得做的原因。</h2>
+          <p class="lede">
+            願景不會讓人熱血，難題才會。以下五題，目前全世界都沒有標準解。
+            我們解掉哪一題，哪一題就是別人抄不走的東西。
+          </p>
+
+          <ol class="prob">
+            <li>
+              <h3>怎麼讓 50 個 Agent 真的不一樣？</h3>
+              <p>如果差異只來自 prompt 裡多一句「你是激進的交易員」，那它們本質上是同一個東西，
+                Agent 市場就失去意義——全都一樣，使用者為什麼要挑？
+                真正的人格必須來自能力結構、資料源、約束條件與風險偏好的差異。</p>
+            </li>
+            <li>
+              <h3>一筆賺錢的交易，功勞算誰的？</h3>
+              <p>研究員找到訊號、風控員沒有擋下、執行員抓到時機。沒有歸因，就沒有可信的個體戰績；
+                沒有個體戰績，信用系統與 Agent 市場全部塌掉。這是整個經濟系統的地基。</p>
+            </li>
+            <li>
+              <h3>當信用可以換錢，怎麼防止有人刷？</h3>
+              <p>只要聲譽有價值，就會有人用一百個帳號賭一個爆賺。
+                統一沙盒、同一起跑線、可重播、可稽核——公平性是競技場的生死線，不是加分項。</p>
+            </li>
+            <li>
+              <h3>一個 30 天的賽季，怎麼在 30 秒內被看懂？</h3>
+              <p>誰逆轉了、誰爆倉了、為什麼重要。看不懂就不會有人看，沒人看就沒有傳播。
+                這是敘事壓縮的工程題，也是我們最大的成長引擎。</p>
+            </li>
+            <li>
+              <h3>怎麼讓風險刺激，但不會真的害到人？</h3>
+              <p>真實市場會爆，而爆掉正是戲劇性的來源。我們要保留這個張力，
+                同時不讓使用者破產、不讓我們上社會新聞。這條線畫在哪，是產品的良心問題。</p>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </section>
+    <section class="chapter" id="ch7">
+      <div class="wrap chapGrid">
+        <div class="chapNo"><b>07</b>第一版</div>
+        <div class="chapBody">
+          <h2>第一版不需要建整個帝國。<br>先證明「養一個 AI 交易員」就很好玩。</h2>
+
+          <div class="decl">
+            驗收標準只有一句：一個從沒看過這產品的人，用完 60 秒後能說出——
+            「我有一座 AI 交易帝國，我剛派 WOLF 出去，它賺了錢回來。」
+            <small>說不出這句話，其他做得再好都不算過關。</small>
+          </div>
+
+          <ol class="flow tight">
+            <li><h3>30 秒內讓他知道自己是誰</h3><p>開場不是 K 線，不是 API 設定。第一句就是「建立你的 AI 交易帝國」。</p></li>
+            <li><h3>給他一個記得住的 Agent</h3><p>有名字、有風格、有風險屬性、有戰績。第一眼就知道它「像誰」。</p></li>
+            <li><h3>讓「派出去 → 帶結果回來」成立</h3><p>第一個魔法時刻。這一步做不出感覺，整個產品就是空的。</p></li>
+            <li><h3>做出第一個競技場</h3><p>統一條件、清楚規則、真實市場、即時排名。這是最早期的內容引擎。</p></li>
+            <li><h3>讓他感覺到帝國在變強</h3><p>從戰績換到信用，解鎖新的 Agent 或能力。成長必須看得見。</p></li>
+            <li><h3>讓不參賽的人也留得下來</h3><p>Leaderboard、重大交易、賽季敘事——先有觀眾，才會有選手。</p></li>
+          </ol>
+
+          <div class="note">
+            這六件事做完，第五章那個循環才算真的轉起來。<br>
+            <b>第一版只要把五種感覺做到成立就夠了：角色感、出征感、戰績感、成長感、競技感。</b>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="chapter" id="ch8">
+      <div class="wrap chapGrid">
+        <div class="chapNo"><b>08</b>決策原則</div>
+        <div class="chapBody">
+          <h2>吵架的時候，回到這六條。</h2>
+          <p class="lede">
+            功能清單會過期，原則不會。以下每一條都附上「爭議時怎麼判」——
+            它們是拿來做決定的，不是拿來貼牆上的。
+          </p>
+
+          <ol class="rules">
+            <li>
+              <h3>先讓人懂，再讓人變專業。</h3>
+              <p>不要求使用者先學會 Agent 術語。優先使用角色、帝國、任務、團隊、戰績、賽季這些直覺概念。</p>
+              <div class="judge">爭議時：選那個不需要解釋名詞的版本。</div>
+            </li>
+            <li>
+              <h3>Agent 要像角色，不是一頁設定。</h3>
+              <p>使用者要能記住、比較、喜歡、討厭、信任某一個 Agent。人格與數據要同時存在。</p>
+              <div class="judge">爭議時：問「他會記得它的名字嗎？」</div>
+            </li>
+            <li>
+              <h3>成長來自真實能力，不是我們發的數字。</h3>
+              <p>真實市場、真實任務、真實信用，是我們跟一般遊戲最大的差別，也是長期信任的唯一來源。</p>
+              <div class="judge">爭議時：如果這個數字是我們憑空給的，重做。</div>
+            </li>
+            <li>
+              <h3>玩家的樂趣是經營，不是代替 AI 做事。</h3>
+              <p>我們要把使用者往 CEO、基金經理、球隊教練推，而不是把他拉回手動交易。</p>
+              <div class="judge">爭議時：這個功能讓他更像操盤手？砍掉。</div>
+            </li>
+            <li>
+              <h3>世界要能被觀看。</h3>
+              <p>任何重要事件都要想清楚：旁觀者怎麼看懂誰做了什麼、為什麼重要、結果如何。</p>
+              <div class="judge">爭議時：問「這件事截圖出去，看得懂嗎？」</div>
+            </li>
+            <li>
+              <h3>先建規則，不要堆功能。</h3>
+              <p>好的系統會讓玩家自己長出故事。內容不該每天靠我們生產，該由角色、資本與市場自己生產。</p>
+              <div class="judge">爭議時：這是規則，還是又一個頁面？</div>
+            </li>
+          </ol>
+
+          <div class="note">
+            我們的共同交付物，不是一個交易工具。<br>
+            <b>是一個會運轉、會競爭、會成長、會自己長出故事的 AI 世界。</b>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <div class="wrap">
+      <p class="manifesto">
+        未來最強大的公司，<br>不一定擁有最多員工。<br>
+        它可能只需要一個有方向的人，<br>和他背後的一整個 AI 組織。
+      </p>
+      <p class="tag">AI Tycoon｜讓智能替你開疆拓土，讓每個人都能號令智能。</p>
+    </div>
+  </footer>
+</body>
+</html>

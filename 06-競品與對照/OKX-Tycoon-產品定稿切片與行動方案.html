@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Tycoon｜產品定稿切片與行動方案</title>
+  <style>
+    :root{
+      --ink:#0a0e13; --panel:#141d26; --raise:#1a242f;
+      --line:rgba(190,215,240,.13); --hair:rgba(190,215,240,.07);
+      --text:#eef3f8; --muted:#8fa2b6; --dim:#6b7f94; --gold:#e8b44a;
+      --serif:"Noto Serif TC",Georgia,"Songti TC",serif;
+      --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC","Noto Sans TC","Microsoft JhengHei",Arial,sans-serif;
+      --mono:ui-monospace,SFMono-Regular,Menlo,monospace;
+      --max:920px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:var(--ink);color:var(--text);font-family:var(--sans);font-size:16.5px;line-height:1.75;-webkit-font-smoothing:antialiased}
+    .wrap{width:min(var(--max),calc(100% - 40px));margin:0 auto;padding:48px 0 80px}
+    .stamp{display:inline-block;font-size:12px;letter-spacing:.08em;color:var(--dim);border:1px solid var(--line);border-radius:3px;padding:4px 9px;margin-bottom:18px}
+    h1{font-family:var(--serif);font-weight:900;font-size:clamp(28px,4.5vw,40px);line-height:1.25;letter-spacing:-.02em;margin:0 0 12px}
+    .meta{color:var(--muted);font-size:14px;margin:0 0 28px}
+    .lede{font-size:18.5px;line-height:1.7;color:#dbe4ee;border-left:2px solid var(--gold);padding:4px 0 4px 18px;margin:0 0 36px}
+    h2{font-family:var(--serif);font-weight:900;font-size:clamp(22px,3vw,28px);margin:42px 0 16px;letter-spacing:-.015em}
+    h3{font-size:16px;margin:24px 0 8px;color:#fff}
+    p{margin:0 0 14px;color:#c4d0dd}
+    ul{margin:0 0 18px;padding-left:1.2em;color:#c4d0dd}
+    li{margin:6px 0}
+    table{width:100%;border-collapse:collapse;margin:12px 0 8px;font-size:14.5px}
+    th{text-align:left;padding:0 12px 10px 0;border-bottom:1px solid var(--line);color:var(--muted);font-weight:500;font-size:12.5px}
+    td{padding:12px 12px 12px 0;border-bottom:1px solid var(--hair);color:#c4d0dd;vertical-align:top}
+    td:first-child{color:#fff;width:28%}
+    .card{border:1px solid var(--line);border-radius:10px;background:var(--panel);padding:18px 20px;margin:18px 0}
+    .card b{color:var(--gold)}
+    .foot{margin-top:48px;padding-top:18px;border-top:1px solid var(--hair);font-size:13px;color:var(--dim)}
+    code{font-family:var(--mono);font-size:13px;color:#d7e6f5}
+  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;900&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="wrap">
+    <div class="stamp">AI TYCOON · 2026-09-17 · Mack</div>
+    <h1>產品定稿切片與行動方案</h1>
+    <p class="meta">依據：Wayne D1–D6 · 產品憲法 · ChatGPT 對照（OKX 僅參考）</p>
+
+    <div class="card" style="margin-bottom:28px"><b>專案起點</b><ul><li><b>全新專案</b>：不對齊舊「出征閉環」草稿／基準（該線未定稿）</li><li>其餘 D1–D6 與行動方案維持</li><li>已向 Hudson 要建置資源</li></ul></div>
+    <p class="lede">你養自己的 AI 交易員：部署它、派它去模擬戰場、帶戰績回來、決定要不要再派——履歷越厚越可信，歷史不能洗白。</p>
+
+    <h2>已鎖定的產品定義</h2>
+    <table>
+      <thead><tr><th>項</th><th>決定</th></tr></thead>
+      <tbody>
+        <tr><td>玩家</td><td>自行部署策略 Agent → 模擬交易 → 看戰報 → 續用或撤回</td></tr>
+        <tr><td>出征</td><td>模擬盤；真實資金後置；戰報標模擬源</td></tr>
+        <tr><td>邊界</td><td>Tycoon <b>自建</b>；OKX 只是參考雛形，不做第一版接線依賴</td></tr>
+        <tr><td>成長</td><td>可信證據／履歷變多（非虛構升級）</td></tr>
+        <tr><td>風險硬規則</td><td>歷史戰績與失敗紀錄不可洗白</td></tr>
+        <tr><td>Go／No-go</td><td><b>60 秒理解成立</b> 且 <b>自願再次出征</b></td></tr>
+      </tbody>
+    </table>
+
+    <h2>出征契約（第一版最小規格）</h2>
+    <p>一次出征必須寫清：</p>
+    <ul>
+      <li>哪個 Agent／哪個策略版本</li>
+      <li>模擬本金與期間（或結束條件）</li>
+      <li>約束（標的、槓桿上限等——可極薄，但要有欄位）</li>
+      <li>狀態：可派／出征中／已歸來</li>
+      <li>歸來戰報：PnL、回撤、交易次數等＋模擬源標示</li>
+      <li>下一步：續用（再出征）／調整／撤回（停用此配置）</li>
+      <li>戰績牆：歷史不可刪、不可賽季洗白</li>
+    </ul>
+
+    <h2>14 天行動方案</h2>
+    <table>
+      <thead><tr><th>天</th><th>行動</th><th>負責</th><th>產出</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>本切片升為全新專案範圍依據（不對齊舊出征閉環）</td><td>Mack＋產品主編</td><td>新專案契約／決策登錄</td></tr>
+        <tr><td>2–3</td><td>寫死「出征契約」欄位與狀態機；禁止洗白規則入系統規則</td><td>系統規則</td><td>出征契約＋不可洗白規則（實作基準）</td></tr>
+        <tr><td>2–3</td><td>部署入口話術：不是工具箱，是「招募／任命第一員大將」</td><td>世界敘事</td><td>部署／出征／歸來文案槽</td></tr>
+        <tr><td>4–5</td><td>三屏＋部署最小步：任命→派出→歸來→再派</td><td>體驗設計</td><td>動線驗收稿</td></tr>
+        <tr><td>4–7</td><td>自建模擬出征可重播；戰績牆保留失敗</td><td>工程</td><td>可演示閉環＋歷史牆</td></tr>
+        <tr><td>8–10</td><td>內部／小樣本：60 秒句＋是否想再派</td><td>產品主編主導</td><td>測試紀錄</td></tr>
+        <tr><td>11–14</td><td>依 D6 判決：通過／改寫／砍概念；只修最阻理解的一刀</td><td>Mack 收斂</td><td>go／no-go 報告</td></tr>
+      </tbody>
+    </table>
+
+    <div class="card">
+      <b>本輪明確不做</b>
+      <ul>
+        <li>接 OKX API／跟單／訂閱經濟</li>
+        <li>真實資金</li>
+        <li>虛構 XP 當成長</li>
+        <li>純排行榜主畫面</li>
+        <li>Agent 參數工具箱當主體驗</li>
+        <li>賽季重置清歷史</li>
+      </ul>
+    </div>
+
+    <h2>與 OKX 參考的用法</h2>
+    <p><b style="color:#fff">借鏡：</b>身份、公開可稽核績效、競賽口徑清晰、失格規則。</p>
+    <p><b style="color:#fff">不學：</b>圍觀訂閱最強交易員當核心循環；把平台當主產品。</p>
+
+    <div class="foot">
+      來源 Markdown：<code>/workspace/doc-hudson-pilot/okx-tycoon-brief/03-產品定稿切片與行動方案.md</code><br>
+      共用庫副本：<code>/home/box/shared/ai-tycoon/06-競品與對照/OKX-Tycoon-產品定稿切片與行動方案.md</code>
+    </div>
+  </div>
+</body>
+</html>

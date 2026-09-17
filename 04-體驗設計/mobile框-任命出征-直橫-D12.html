@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>D12 Mobile 直／橫框｜任命席＋出征席</title>
+<style>
+  :root {
+    --bg: #0c1018;
+    --panel: rgba(28, 36, 48, 0.88);
+    --stroke: rgba(200, 220, 240, 0.75);
+    --text: #f2f5f8;
+    --dim: rgba(242, 245, 248, 0.65);
+    --gold: #c9a227;
+    --gold-ink: #1a1408;
+    --sim: #e85d3a;
+    --accent: #7ad7ff;
+    --font: "Segoe UI", "PingFang TC", "Noto Sans TC", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: var(--font); background: var(--bg); color: var(--text); }
+  header {
+    padding: 14px 18px; border-bottom: 1px solid #243044; background: #121826;
+    font-size: 13px; line-height: 1.5;
+  }
+  header strong { color: var(--accent); }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px; padding: 20px; align-items: start;
+  }
+  .card { display: flex; flex-direction: column; gap: 8px; }
+  .card h2 { margin: 0; font-size: 14px; color: var(--accent); font-weight: 600; }
+  .card p.note { margin: 0; font-size: 11px; color: var(--dim); }
+  .phone {
+    margin: 0 auto; background: #1a2330; border: 2px solid #3a4d66; border-radius: 18px;
+    padding: 10px; position: relative;
+  }
+  .phone.portrait { width: 280px; }
+  .phone.landscape { width: 100%; max-width: 520px; }
+  .screen {
+    background: linear-gradient(180deg, #1e3a4a 0%, #152030 40%, #121826 100%);
+    border: 1px solid var(--stroke); border-radius: 12px; overflow: hidden;
+    position: relative;
+  }
+  .phone.portrait .screen { height: 500px; }
+  .phone.landscape .screen { height: 280px; }
+  .bar {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 6px 10px; font-size: 10px; color: var(--dim);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .sim {
+    color: #fff; background: var(--sim); font-size: 9px; font-weight: 700;
+    padding: 1px 5px; border-radius: 2px; letter-spacing: 0.02em;
+  }
+  .body { padding: 10px; height: calc(100% - 28px); display: flex; flex-direction: column; gap: 8px; }
+  .landscape .body { flex-direction: row; gap: 10px; }
+  .col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+  .hero {
+    background: var(--panel); border: 1px solid var(--stroke); border-radius: 8px;
+    padding: 10px; display: flex; gap: 8px; align-items: center;
+  }
+  .avatar {
+    width: 48px; height: 48px; border-radius: 8px; border: 1px solid var(--gold);
+    background: #2a3548; display: grid; place-items: center; font-size: 11px; color: var(--gold);
+    flex-shrink: 0;
+  }
+  .hero h3 { margin: 0; font-size: 14px; }
+  .hero .sub { font-size: 10px; color: var(--dim); margin-top: 2px; }
+  .tabs { display: flex; gap: 4px; }
+  .tabs span {
+    flex: 1; text-align: center; font-size: 11px; padding: 6px;
+    border: 1px solid transparent; color: var(--dim);
+  }
+  .tabs span.on {
+    color: var(--text); border-color: var(--stroke); background: var(--panel);
+  }
+  .skill {
+    background: var(--panel); border: 1px solid var(--stroke); border-radius: 8px;
+    padding: 8px; font-size: 10px; line-height: 1.35;
+  }
+  .skill b { color: var(--accent); display: block; margin-bottom: 4px; font-size: 11px; }
+  .skill div { margin: 3px 0; color: var(--dim); }
+  .skill div strong { color: var(--text); font-weight: 600; }
+  .perf {
+    background: var(--panel); border: 1px solid var(--stroke); border-radius: 8px;
+    padding: 8px; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; font-size: 10px;
+  }
+  .perf .k { color: var(--dim); }
+  .perf .v { color: var(--text); font-weight: 600; }
+  .nl {
+    font-size: 10px; color: var(--accent); border: 1px dashed rgba(122,215,255,0.45);
+    padding: 6px 8px; border-radius: 6px; text-align: center;
+  }
+  .cta {
+    margin-top: auto; background: var(--gold); color: var(--gold-ink);
+    text-align: center; padding: 12px; font-size: 13px; font-weight: 700;
+    border-radius: 8px; border: 1px solid #a8841a;
+  }
+  .ghost {
+    text-align: center; font-size: 10px; color: var(--dim); padding: 4px;
+  }
+  .period {
+    background: var(--panel); border: 1px solid var(--stroke); border-radius: 8px; padding: 8px;
+  }
+  .period .label { font-size: 10px; color: var(--accent); margin-bottom: 6px; font-weight: 600; }
+  .segs { display: flex; gap: 4px; }
+  .segs i {
+    flex: 1; text-align: center; font-style: normal; font-size: 10px; padding: 8px 4px;
+    border: 1px solid var(--stroke); color: var(--dim); border-radius: 4px;
+  }
+  .segs i.on { background: rgba(201,162,39,0.2); border-color: var(--gold); color: var(--text); font-weight: 600; }
+  .contract { font-size: 10px; color: var(--dim); line-height: 1.4; }
+  .tag {
+    display: inline-block; font-size: 9px; color: var(--accent);
+    border: 1px solid #3a4d66; background: #121826; padding: 1px 5px; margin-bottom: 4px;
+  }
+  footer.doc {
+    padding: 12px 18px 28px; font-size: 12px; color: var(--dim); line-height: 1.55; max-width: 960px;
+  }
+</style>
+</head>
+<body>
+<header>
+  <div><strong>D12 Mobile 標註框</strong>｜任命席＋出征席｜直屏／橫屏（非生圖・可重開）</div>
+  <div>準據：D12 鎖定 · IA：<code>IA增量-任命席出征席-D12.md</code> · cancel=false · 期間每次可換 · 職業＝Skill 三欄</div>
+</header>
+
+<div class="grid">
+  <!-- 任命 直 -->
+  <div class="card">
+    <h2>1｜任命席 · 直屏</h2>
+    <p class="note">主層＝角色＋職業三欄＋綜合表現；歷史＝Tab</p>
+    <div class="phone portrait">
+      <div class="screen">
+        <div class="bar"><span>任命席</span><span class="sim">模擬</span></div>
+        <div class="body">
+          <div class="tabs"><span class="on">角色</span><span>歷史</span></div>
+          <div class="hero">
+            <div class="avatar">角色</div>
+            <div>
+              <h3>{agent_name}</h3>
+              <div class="sub">職業／Skill · 可派</div>
+            </div>
+          </div>
+          <div class="skill">
+            <b>職業＝Skill</b>
+            <div><strong>能力</strong> — 會什麼（一句）</div>
+            <div><strong>情境</strong> — 適合什麼（一句）</div>
+            <div><strong>限制</strong> — 不能超什麼（硬邊界）</div>
+          </div>
+          <div>
+            <span class="tag">綜合表現（非清單）</span>
+            <div class="perf">
+              <div><div class="k">累計 PnL</div><div class="v">—</div></div>
+              <div><div class="k">出征次數</div><div class="v">—</div></div>
+              <div><div class="k">回撤摘要</div><div class="v">—</div></div>
+              <div><div class="k">近況</div><div class="v">示意／空</div></div>
+            </div>
+          </div>
+          <div class="nl">用一句話調整策略（受限於職業限制）≠ 工具箱</div>
+          <div class="cta">去出征席</div>
+          <div class="ghost">撤回此配置 · 履歷保留</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 任命 橫 -->
+  <div class="card">
+    <h2>2｜任命席 · 橫屏</h2>
+    <p class="note">左角色＋表現；右職業＋CTA；歷史仍 Tab</p>
+    <div class="phone landscape">
+      <div class="screen landscape">
+        <div class="bar"><span>任命席</span><span class="sim">模擬</span></div>
+        <div class="body">
+          <div class="col">
+            <div class="tabs"><span class="on">角色</span><span>歷史</span></div>
+            <div class="hero">
+              <div class="avatar">角色</div>
+              <div><h3>{agent_name}</h3><div class="sub">職業／Skill · 可派</div></div>
+            </div>
+            <div class="perf">
+              <div><div class="k">累計 PnL</div><div class="v">—</div></div>
+              <div><div class="k">出征</div><div class="v">—</div></div>
+              <div><div class="k">回撤</div><div class="v">—</div></div>
+              <div><div class="k">近況</div><div class="v">—</div></div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="skill">
+              <b>職業＝Skill</b>
+              <div><strong>能力</strong> — …</div>
+              <div><strong>情境</strong> — …</div>
+              <div><strong>限制</strong> — …</div>
+            </div>
+            <div class="nl">NL 調策略（不越權）</div>
+            <div class="cta">去出征席</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 出征 直 -->
+  <div class="card">
+    <h2>3｜出征席 · 直屏</h2>
+    <p class="note">期間每次可換；派出前在主 CTA 上方</p>
+    <div class="phone portrait">
+      <div class="screen">
+        <div class="bar"><span>出征席</span><span class="sim">模擬</span></div>
+        <div class="body">
+          <div class="hero">
+            <div class="avatar">將</div>
+            <div>
+              <h3>派 {agent_name}</h3>
+              <div class="sub">職業名 · 等戰報、別盯盤</div>
+            </div>
+          </div>
+          <div class="period">
+            <div class="label">出征期間（每次可換）</div>
+            <div class="segs">
+              <i>短征</i><i class="on">日</i><i>週</i>
+            </div>
+            <div class="contract" style="margin-top:6px">對應 planned_duration／time_window_type · 可預填上次但必須可改</div>
+          </div>
+          <div class="skill">
+            <b>本次契約摘要</b>
+            <div>本金 {sim_capital} · 版本 {strategy_version}</div>
+            <div>約束：職業限制＋本次極薄約束</div>
+          </div>
+          <div class="cta">派出</div>
+          <div class="ghost">返回任命席 · 無作戰中取消</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 出征 橫 -->
+  <div class="card">
+    <h2>4｜出征席 · 橫屏</h2>
+    <p class="note">左期間＋摘要；右契約＋派出</p>
+    <div class="phone landscape">
+      <div class="screen landscape">
+        <div class="bar"><span>出征席</span><span class="sim">模擬</span></div>
+        <div class="body">
+          <div class="col">
+            <div class="hero">
+              <div class="avatar">將</div>
+              <div><h3>{agent_name}</h3><div class="sub">可派</div></div>
+            </div>
+            <div class="period">
+              <div class="label">出征期間（每次可換）</div>
+              <div class="segs"><i>短征</i><i class="on">日</i><i>週</i></div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="skill">
+              <b>契約摘要</b>
+              <div>本金 · 版本 · 約束極薄</div>
+              <div class="contract">模擬源常駐 · cancel=false</div>
+            </div>
+            <div class="cta">派出</div>
+            <div class="ghost">返回任命席</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="doc">
+  讀法：金鈕＝主 CTA；紅「模擬」＝常駐源標；期間三段為示意選項（產品可改標籤，體驗要求「每征可異」）。
+  歷史 Tab 點入後為列表（含失敗），不在本主層展開。NL 入口僅次級，越權由規則／敘事擋。
+</footer>
+</body>
+</html>
