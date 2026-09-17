@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>D20｜策略調整屏位 · 直屏框</title>
+<style>
+  :root {
+    --bg:#0c1018;--card:#1c1e28;--line:#2c2f3d;--text:#e8e8ee;--muted:#8b8fa3;
+    --gold:#e0a44a;--warn:#d9434f;--ink:#1a1206;--ok:#5ecf8e;--info:#7ad7ff;
+    font-family:"PingFang TC","Noto Sans TC",system-ui,sans-serif;
+  }
+  *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text)}
+  header{padding:12px 16px;border-bottom:1px solid #243044;font-size:13px;line-height:1.45}
+  header strong{color:var(--info)}
+  .wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;padding:16px}
+  .phone{width:280px;margin:0 auto;border:2px solid #3a4d66;border-radius:18px;padding:8px;background:#151a24}
+  .screen{background:var(--card);border:1px solid var(--line);border-radius:12px;min-height:420px;padding:12px;display:flex;flex-direction:column;gap:10px}
+  .steps{font-size:10px;color:var(--muted);display:flex;flex-wrap:wrap;gap:4px;align-items:center}
+  .steps b{color:var(--text)}
+  .steps .off{opacity:.45;text-decoration:line-through}
+  h2{margin:0;font-size:13px;color:var(--gold)}
+  .hero{display:flex;gap:10px;align-items:center;border:1px solid var(--gold);border-radius:10px;padding:10px}
+  .av{width:48px;height:48px;border-radius:8px;border:1px solid var(--gold);display:grid;place-items:center;font-weight:800;color:var(--gold)}
+  .name{font-size:22px;font-weight:800}
+  .l0{font-size:15px;line-height:1.35;margin:0}
+  .cta{margin-top:auto;background:var(--gold);color:var(--ink);text-align:center;font-weight:800;padding:14px;border-radius:10px;font-size:16px}
+  .cta.withdraw{background:#c45c3a;color:#fff}
+  .cta.busy{background:#5a4a2a;color:#f0e0c0}
+  .l1{font-size:11px;color:var(--info);text-align:center;padding:6px;border:1px dashed rgba(122,215,255,.35);border-radius:8px}
+  .thin{font-size:12px;color:var(--info);text-align:center;padding:8px;border:1px solid rgba(122,215,255,.4);border-radius:8px;background:rgba(122,215,255,.06)}
+  .ghost{font-size:11px;color:var(--muted);text-align:center}
+  .segs{display:flex;gap:6px}
+  .seg{flex:1;text-align:center;border:1px solid var(--line);border-radius:8px;padding:10px 4px;font-size:13px;color:var(--muted)}
+  .seg.on{border-color:var(--gold);color:var(--text);font-weight:700;background:rgba(224,164,74,.15)}
+  .picked{font-size:12px;color:var(--ok);text-align:center;font-weight:700}
+  .locked{font-size:12px;color:var(--gold);text-align:center;font-weight:700}
+  .big{font-size:28px;font-weight:800;color:#e5616a}
+  .big.pos{color:var(--ok)}
+  .metric{font-size:12px;color:var(--muted);text-align:center}
+  .ban{font-size:10px;color:var(--warn);text-align:center;border:1px solid rgba(217,67,79,.4);padding:4px;border-radius:6px}
+  .oknote{font-size:10px;color:var(--ok);text-align:center;border:1px solid rgba(94,207,142,.4);padding:4px;border-radius:6px}
+  .note{font-size:11px;color:var(--muted);margin:0 0 6px}
+  .anno{font-size:10px;color:var(--info);margin:6px 0 0;line-height:1.4;border-left:2px solid var(--info);padding-left:8px}
+  .d20{font-size:10px;color:#c9a0ff;margin:4px 0 0;line-height:1.35}
+  .prog{height:8px;background:#2a2e3c;border-radius:999px;overflow:hidden}
+  .prog>i{display:block;height:100%;width:42%;background:linear-gradient(90deg,#e0a44a,#7ad7ff)}
+  .toast{font-size:11px;background:#243044;border:1px solid #3a4d66;border-radius:8px;padding:6px;text-align:center;color:#cde}
+  .sheet{border:1px solid rgba(224,164,74,.45);border-radius:10px;padding:10px;background:rgba(224,164,74,.08);font-size:12px;line-height:1.4}
+  .sheet .k{color:var(--gold);font-weight:700;font-size:11px;margin-bottom:4px}
+</style>
+</head>
+<body>
+<header>
+  <div><strong>D20 直屏框</strong>｜策略調整屏位｜狀態：待 Cruz 預檢</div>
+  <div>權威：Wayne D20 三點 lock＋Mater 文案槽；結構中轉 GPT-6 Astra High（與 Mater／D16 衝突跟 Mater／Wayne）。基線 D18；本框只展 D20 覆寫。</div>
+  <div><strong>硬規則</strong>：改打法只在大將／角色側 · 派出頁只選期間（✂ 無改打法）· 戰報主＝再派、弱＝先改打法導回大將 · 戰報／派出／出征中無改打法／NL · 歸來後可「回大將改打法→再派」· 禁「只能重新任命」· 玩家 UI 無「模擬」標 · in-field 撤回仍＝立刻結算。數字僅示意槽，非驗收指標。</div>
+  <div>對齊：<code>IA動線改稿-D20.md</code> · <code>文案槽-D20-策略調整屏位.md</code> · 基線 <code>IA動線改稿-D18.md</code>／<code>mobile框-D18-直屏.html</code></div>
+</header>
+<div class="wrap">
+
+  <!-- 1 大將空→任命 -->
+  <div>
+    <p class="note">① 大將 · 空 → 任命</p>
+    <div class="phone"><div class="screen">
+      <div class="steps"><b>①任命</b> → <span class="off">②派出</span> → <span class="off">③戰報</span> · 紀錄</div>
+      <h2>大將</h2>
+      <p class="l0">還沒有大將。</p>
+      <div class="ban">禁：L0「模擬」徽章／腳註</div>
+      <div class="toast">派出不可達：現在不能派。</div>
+      <div class="cta">任命</div>
+    </div></div>
+    <p class="anno">F1 仍持：任命成功 → auto 進派出 ready；無「去出征」主 CTA 搶路徑。</p>
+    <p class="d20">D20：改打法尚未出現（無大將）。</p>
+  </div>
+
+  <!-- 2 大將已就位：改打法薄層 -->
+  <div>
+    <p class="note">② 大將 · 已就位（改打法次級；可去派出勿搶）</p>
+    <div class="phone"><div class="screen">
+      <div class="steps"><b>①大將</b> → ②派出 → <span class="off">③戰報</span> · 紀錄</div>
+      <h2>大將</h2>
+      <div class="hero"><div class="av">W</div><div><div class="name">WOLF</div></div></div>
+      <p class="l0">WOLF</p>
+      <div class="l1">職業縮寫 · 複合簡述（示意）</div>
+      <div class="thin">改打法 · 跟 WOLF 交代怎麼打</div>
+      <div class="ghost">去派出（薄；勿搶 F1／任命主路徑）</div>
+      <div class="oknote">出征紀錄入口可在此 · 非派出頁</div>
+      <div class="ban">禁：把「前往派出」做成搶 F1 的主 CTA</div>
+    </div></div>
+    <p class="anno">Mater：adjust_on_agent＝次級／薄層。F1 auto 進派出仍持；停留態改打法可見。</p>
+    <p class="d20">D20：改打法住大將，不在派出。</p>
+  </div>
+
+  <!-- 3 大將 L2 改打法層 -->
+  <div>
+    <p class="note">③ 大將 L2 · 改打法層（點開示意）</p>
+    <div class="phone"><div class="screen">
+      <div class="steps"><b>①大將</b> · 改打法 L2</div>
+      <h2>改打法</h2>
+      <div class="sheet">
+        <div class="k">入口</div>
+        跟 WOLF 交代怎麼打。派出前在這裡調。
+      </div>
+      <div class="sheet">
+        <div class="k">界內／擋下（示意）</div>
+        收到。仍在它會的範圍內。／這步做不到——不是不肯，是不能超。
+      </div>
+      <div class="ghost">反工具箱：這裡是交代大將，不是改設定面板。</div>
+      <div class="oknote">可選 L2：虛擬資金／不送真實市場（禁「模擬」字）</div>
+      <div class="cta">打法已定</div>
+      <div class="ghost">去選出征多久，再派出 · 儲存≠派出</div>
+    </div></div>
+    <p class="anno">嵌 Mater §3 整段。對齊 D14：不開參數工廠全屏；L2 sheet 即可。</p>
+    <p class="d20">D20：入口在大將點開；派出／戰報整段無此層。</p>
+  </div>
+
+  <!-- 4 派出 ready：無改打法 -->
+  <div>
+    <p class="note">④ 派出 ready · 只有期間＋派出</p>
+    <div class="phone"><div class="screen">
+      <div class="steps">①任命 → <b>②派出</b> → <span class="off">③戰報</span> · 紀錄</div>
+      <h2>派出</h2>
+      <div class="hero"><div class="av">W</div><div><div class="name">WOLF</div></div></div>
+      <p class="l0">派 WOLF 出去。</p>
+      <div class="segs"><div class="seg">短征</div><div class="seg on">日</div><div class="seg">週</div></div>
+      <div class="picked">選好了：日</div>
+      <div class="ban">✂ 無改打法 · ✂ 無 NL · ✂ 無出征紀錄 · ✂ 無模擬標</div>
+      <div class="cta">派出</div>
+    </div></div>
+    <p class="anno">相對 D18：已刪派出屏 adjust_before_dispatch。第一眼只有期間＋派出。</p>
+    <p class="d20">D20 硬規則：派出頁只選期間。</p>
+  </div>
+
+  <!-- 5 in-field 撤回 -->
+  <div>
+    <p class="note">⑤ 在外面 · 撤回（主 CTA）</p>
+    <div class="phone"><div class="screen">
+      <div class="steps">①任命 → <b>②派出</b> → <span class="off">③戰報</span> · 紀錄</div>
+      <h2>派出</h2>
+      <p class="l0">在外面。等結果。</p>
+      <div class="locked">這次：日</div>
+      <div class="prog" aria-hidden="true"><i></i></div>
+      <div class="ghost">進度顯示 · 非按鈕</div>
+      <div class="oknote">cancel_supported=true → 撤回＝立刻結算＋帶回戰報</div>
+      <div class="ban">禁止：熱改策略／NL · 無結果取消</div>
+      <div class="cta withdraw">撤回</div>
+    </div></div>
+    <p class="anno">D18 仍持。出征中＝無改打法。</p>
+    <p class="d20">D20：本態無策略入口。</p>
+  </div>
+
+  <!-- 6 戰報正常 -->
+  <div>
+    <p class="note">⑥ 戰報 · 正常回來（主再派；弱先改打法）</p>
+    <div class="phone"><div class="screen">
+      <div class="steps">①任命 → ②派出 → <b>③戰報</b> · 紀錄</div>
+      <h2>戰報</h2>
+      <p class="l0">WOLF 回來了。</p>
+      <div class="metric">賺賠</div>
+      <div class="big">−267.24</div>
+      <p class="l0">最大回落 6.26%</p>
+      <div class="ban">本屏禁：改打法本體／NL／調職業／「模擬」標</div>
+      <div class="cta">再派</div>
+      <div class="thin">先改打法 · 想換打法？回大將那邊改。</div>
+      <div class="ghost">撤回 · 停用這員（弱；約已結）</div>
+    </div></div>
+    <p class="anno">Mater：主＝redispatch；弱＝go_adjust_then_dispatch。勿把主 CTA 改成「回大將準備再派」。</p>
+    <p class="d20">數字示意槽。再派＝新建選期。</p>
+  </div>
+
+  <!-- 7 戰報 withdrawn_settled -->
+  <div>
+    <p class="note">⑦ 戰報 · withdrawn_settled（同＋弱先改打法）</p>
+    <div class="phone"><div class="screen">
+      <div class="steps">①任命 → ②派出 → <b>③戰報</b> · 紀錄</div>
+      <h2>戰報</h2>
+      <p class="l0">WOLF 已撤回。戰報帶回。</p>
+      <div class="metric">賺賠</div>
+      <div class="big pos">＋18.40</div>
+      <p class="l0">最大回落 2.10%　已記下。</p>
+      <div class="oknote">正式入牆 · 不可洗白 · 撤回≠一定虧</div>
+      <div class="ban">禁：本屏改打法本體 · 「只能重新任命」</div>
+      <div class="cta">再派</div>
+      <div class="thin">先改打法 · 回大將那邊改</div>
+      <div class="ghost">in-field 撤回鈕已停用</div>
+    </div></div>
+    <p class="anno">與正常歸來同構：主再派＋弱先改打法。保留 withdrawn_settled 身分。</p>
+    <p class="d20">D20 情境：撤回後也能走到改打法→再派。</p>
+  </div>
+
+  <!-- 8 大將歸來後 -->
+  <div>
+    <p class="note">⑧ 大將 · 歸來後（戰果＋改打法；可直接再派）</p>
+    <div class="phone"><div class="screen">
+      <div class="steps"><b>①大將</b> · 歸來後 → 再派</div>
+      <h2>大將</h2>
+      <div class="hero"><div class="av">W</div><div><div class="name">WOLF</div></div></div>
+      <p class="l0">戰果已記下。</p>
+      <div class="metric">本次賺賠（示意）</div>
+      <div class="big">−267.24</div>
+      <div class="thin">改打法 · 要改打法再派，還是直接再派？</div>
+      <div class="oknote">改打法可見 · 勿强迫每次必改</div>
+      <div class="ghost">直接再派／去選期間（次級）</div>
+      <div class="ban">禁：「只能重新任命才能換打法」</div>
+    </div></div>
+    <p class="anno">Mater 歸來句。結果摘要旁可見改打法；次級可沿用打法再派。</p>
+    <p class="d20">路徑：改打法（可選）→ 派出 ready 只選期間。</p>
+  </div>
+
+  <!-- 9 再派→派出 ready -->
+  <div>
+    <p class="note">⑨（可選）再派 → 派出 ready（無改打法；期間預填）</p>
+    <div class="phone"><div class="screen">
+      <div class="steps">①任命 → <b>②派出</b> → ③戰報 · 紀錄</div>
+      <h2>派出</h2>
+      <p class="l0">派 WOLF 出去。</p>
+      <div class="oknote">再派已建下一趟 · 大將無暗門建約</div>
+      <div class="segs"><div class="seg on">日</div><div class="seg">短征</div><div class="seg">週</div></div>
+      <div class="picked">選好了：日（預填上一趟）</div>
+      <div class="ban">✂ 無改打法 · 仍無本屏紀錄 · 仍無模擬標 · 仍須派出才出發</div>
+      <div class="cta">派出</div>
+    </div></div>
+    <p class="anno">F2／F3／F5＋D20：預填期間；改打法不在本屏——若要調，回大將。</p>
+    <p class="d20">新約 ready 只選期；舊約結果不可洗白。</p>
+  </div>
+
+</div>
+</body>
+</html>
